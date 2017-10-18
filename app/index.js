@@ -53,8 +53,8 @@ const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}))
 parser.on('data', function (data) {
   console.log(data);
   const sensor = CMMCParser.parse(data);
-  sensor.temperature = sensor.temperature/1000;
-  sensor.humidity = sensor.humidity/1000;
+  sensor.temperature = sensor.temperature;
+  sensor.humidity = sensor.humidity;
   console.log(sensor);
   // console.log(CMMCParser.parse(data))
 });
