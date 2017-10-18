@@ -1,5 +1,7 @@
 #!/bin/env node
 
+
+var Parser = require('binary-parser').Parser;
 const chalk = require('chalk');
 const SerialPort = require('serialport');
 const Delimiter = SerialPort.parsers.Delimiter;
@@ -7,20 +9,36 @@ const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
 
-port.on('open', () => {});
+// port.on('open', () => {});
 
-// open errors will be emitted as an error event
-port.on('error', (err) => {
-  // console.log(chalk.red('Error: ', err.message));
-});
+// // open errors will be emitted as an error event
+// port.on('error', (err) => {
+//   // console.log(chalk.red('Error: ', err.message));
+// });
 
-port.on('data', (data) => {
-  // console.log(data);
-  // console.log(chalk.cyan('Data: ' + data));
-});
+// port.on('data', (data) => {
+//   // console.log(data);
+//   // console.log(chalk.cyan('Data: ' + data));
+// });
 
+const toHexString = function (arr) {
+  return Buffer.from(arr).toString('hex');
+};
 
+const CMMCParser = new Parser().endianess('big')
+  .array('header', {
+    type: 'uint8',
+    length: 2,
+    formatter: toHexString
+  })
+  .array('to', {
+    type: 'uint8',
+    length: 6,
+    formatter: toHexString
+  })
+  
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   console.log(data);
 });
+
