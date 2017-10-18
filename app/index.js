@@ -41,7 +41,8 @@
 
   port.on('data', (data) => {
     'use strict';
-    console.log(chalk.cyan('Data: ' + data));
+    console.log(data);
+    // console.log(chalk.cyan('Data: ' + data));
   });
 
 }
