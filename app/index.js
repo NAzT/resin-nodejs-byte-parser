@@ -31,14 +31,27 @@ const CMMCParser = new Parser().endianess('big')
     length: 2,
     formatter: toHexString
   })
-  .array('to', {
+  .array('from', {
     type: 'uint8',
     length: 6,
     formatter: toHexString
   })
+  .array('master', {
+    type: 'uint8',
+    length: 6,
+    formatter: toHexString
+  })
+  .endianess('little')
+  .uint16('battery')
+  .uint32('temperature')
+  .uint32('humidity')
+  .uint32('ms')
+  .uint32('sum')
+  .uint32('sum2')
   
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   console.log(data);
+  console.log(CMMCParser.parse(data))
 });
 
