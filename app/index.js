@@ -9,7 +9,21 @@ const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
 
+let port_ok = false;
+
 port.on('open', () => {
+  port_ok = true;
+});
+
+port.on('error', () => {
+  port_ok = false;
+});
+
+setInterval(function() {
+  if (!port_ok)  {
+    console.log('serial port closed.');
+    return;
+  }
   if (process.env.CONTROLLER_CMD) {
     console.log("writing... CONTROLLER_CMD")
     const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
@@ -18,8 +32,7 @@ port.on('open', () => {
       console.log(err);
     });
   }
-});
-
+}, 1000);
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
 //   // console.log(chalk.red('Error: ', err.message));
