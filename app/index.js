@@ -12,7 +12,7 @@ const port = new SerialPort(process.env.TARGET_PORT, {
 let port_ok = false;
 
 const writeCmd = function() {
-    const sleepTime = parseInt(process.env.SLEEP_TIME_S, 10) || 60; 
+    const sleepTime = parseInt(process.env.SLEEP_TIME_S || 60, 10); 
     const header = Buffer.from('cacb', 'hex');
     const timeBuffer = Buffer.allocUnsafe(4);
     timeBuffer.writeUInt32LE(sleepTime)
