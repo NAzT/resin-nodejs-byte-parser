@@ -11,28 +11,30 @@ const port = new SerialPort(process.env.TARGET_PORT, {
 
 let port_ok = false;
 
+const writeCmd = function() {
+  if (process.env.CONTROLLER_CMD) {
+    const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
+    port.write(cmd, (err) => { });
+  }
+}
+
 port.on('open', () => {
   port_ok = true;
+  writeCmd();
 });
 
 port.on('error', () => {
   port_ok = false;
 });
 
+
 setInterval(function() {
   if (!port_ok)  {
     console.log('serial port closed.');
     return;
   }
-  if (process.env.CONTROLLER_CMD) {
-    console.log("writing... CONTROLLER_CMD")
-    const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
-    console.log(cmd);
-    port.write(cmd, (err) => {
-      console.log(err);
-    });
-  }
-}, 1000);
+  writeCmd();
+}, 60*1000);
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
 //   // console.log(chalk.red('Error: ', err.message));
