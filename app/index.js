@@ -9,7 +9,15 @@ const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
 
-// port.on('open', () => {});
+port.on('open', () => {
+  if (process.env.CONTROLLER_CMD) {
+    console.log("writing... CONTROLLER_CMD")
+    const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
+    port.write(process.env.CONTROLLER_CMD, (err) => {
+      console.log(err);
+    }
+  }
+});
 
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
