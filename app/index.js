@@ -39,7 +39,7 @@ setInterval(function() {
     return;
   }
   writeCmd();
-}, 5000);
+}, 60*1000);
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
 //   // console.log(chalk.red('Error: ', err.message));
