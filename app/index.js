@@ -49,9 +49,9 @@ const CMMCParser = new Parser().endianess('big')
   .float('temperature')
   .float('humidity')
   .uint32('slave_ms')
+  .uint32('slave_sum')
   .uint8('sleep')
   .uint8('controller_ms')
-  .uint32('sum')
   .uint32('sum2')
   
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
