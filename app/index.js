@@ -17,6 +17,7 @@ const writeCmd = function() {
     const timeBuffer = Buffer.allocUnsafe(4);
     timeBuffer.writeUInt32LE(sleepTime)
     const cmd = Buffer.concat([header, timeBuffer], 6);
+    console.log(cmd)
     port.write(cmd, (err) => { });
 
 }
