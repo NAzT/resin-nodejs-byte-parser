@@ -15,7 +15,7 @@ port.on('open', () => {
     const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
     port.write(process.env.CONTROLLER_CMD, (err) => {
       console.log(err);
-    }
+    });
   }
 });
 
