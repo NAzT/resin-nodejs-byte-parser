@@ -15,9 +15,9 @@ const writeCmd = function() {
     const sleepTimeS = parseInt(process.env.SLEEP_TIME_MINUTE || 1, 10); 
     const cmd = Buffer.allocUnsafe(3);
 
-    cmd.write(sleepTimeS, 0);
-    cmd.write(sleepTimeS, 1);
-    cmd.write(sleepTimeS, 2);
+    cmd.writeUInt8(sleepTimeS, 0);
+    cmd.writeUInt8(sleepTimeS, 1);
+    cmd.writeUInt8(sleepTimeS, 2);
     port.write(cmd, (err) => { });
 
 }
