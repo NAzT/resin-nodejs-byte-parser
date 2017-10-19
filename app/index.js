@@ -39,7 +39,7 @@ const CMMCParser = new Parser().endianess('big')
     length: 6,
     formatter: toHexString
   })
-  .array('master', {
+  .array('to', {
     type: 'uint8',
     length: 6,
     formatter: toHexString
@@ -50,7 +50,7 @@ const CMMCParser = new Parser().endianess('big')
   .float('humidity')
   .uint32('ms')
   .uint32('sum')
-  .uint32('sleep')
+  .uint32('sleep_s')
   .uint32('ms_controller')
   .uint32('sum_controller')
   
