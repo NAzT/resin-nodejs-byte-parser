@@ -51,7 +51,7 @@ const CMMCParser = new Parser().endianess('big')
   .uint32('ms')
   .uint32('sum')
   .uint32('sleep')
-  .uint8('ms-controller')
+  .uint32('ms-controller')
   .uint32('sum2')
   
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
