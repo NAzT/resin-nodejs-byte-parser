@@ -13,6 +13,7 @@ port.on('open', () => {
   if (process.env.CONTROLLER_CMD) {
     console.log("writing... CONTROLLER_CMD")
     const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
+    console.log(cmd);
     port.write(cmd, (err) => {
       console.log(err);
     });
