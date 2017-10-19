@@ -12,10 +12,12 @@ const port = new SerialPort(process.env.TARGET_PORT, {
 let port_ok = false;
 
 const writeCmd = function() {
-  if (process.env.CONTROLLER_CMD) {
-    const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
-    console.log(cmd)
-    port.write(cmd, (err) => { });
+  if (process.env.SLEEP_TIME_S) {
+    const sleepTime = parseInt(process.env.SLEEP_TIME_S, 10); 
+    console.log(sleepTime);
+    // const cmd =  Buffer.from(process.env.CONTROLLER_CMD, 'hex')
+    // console.log(cmd)
+    // port.write(cmd, (err) => { });
   }
 }
 
