@@ -15,7 +15,7 @@ const writeCmd = function() {
     const sleepTime = parseInt(process.env.SLEEP_TIME_S || 60, 10); 
     const header = Buffer.from('cacb', 'hex');
     const timeBuffer = Buffer.allocUnsafe(4);
-    timeBuffer.writeUInt32LE(sleepTime)
+    timeBuffer.writeUInt32BE(sleepTime)
     const cmd = Buffer.concat([header, timeBuffer], 6);
     console.log(cmd)
     port.write(cmd, (err) => { });
