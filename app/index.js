@@ -14,11 +14,11 @@ let port_ok = false;
 const writeCmd = function() {
     const sleepTimeS = parseInt(process.env.SLEEP_TIME_S || 60, 10); 
     const cmd = Buffer.allocUnsafe(3);
-    console.log(cmd)
 
     cmd.writeUInt8(sleepTimeS, 0);
     cmd.writeUInt8(sleepTimeS, 1);
     cmd.writeUInt8(sleepTimeS, 2);
+    console.log(cmd)
     port.write(cmd, (err) => { });
 
 }
