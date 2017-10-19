@@ -12,7 +12,7 @@ const port = new SerialPort(process.env.TARGET_PORT, {
 let port_ok = false;
 
 const writeCmd = function() {
-    const sleepTimeS = parseInt(process.env.SLEEP_TIME_S || 1, 10); 
+    const sleepTimeS = parseInt(process.env.SLEEP_TIME_S || 60, 10); 
     const cmd = Buffer.allocUnsafe(3);
 
     cmd.writeUInt8(sleepTimeS, 0);
