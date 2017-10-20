@@ -93,7 +93,7 @@ parser.on('data', function (data) {
     const sensor = CMMCParser.parse(data);
     sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
     sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
-    var out = {
+    const out = {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
       d: {}
     };
