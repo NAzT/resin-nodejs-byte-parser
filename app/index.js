@@ -96,8 +96,11 @@ parser.on('data', function (data) {
   console.log(sensor);
   var out = {
     info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
-    d: {...sensor}
+    d: {}
   };
+  Object.keys(sensor).forEach((key, idx) => {
+    out.d[key] = sensor[key];
+  });
   mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(sensor), {retain: false});
   // console.log(CMMCParser.parse(data))
 });
