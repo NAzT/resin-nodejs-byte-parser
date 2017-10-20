@@ -8,6 +8,8 @@ const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
 
+const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
+
 let portOk = false;
 
 const writeCmd = function () {
