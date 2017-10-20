@@ -89,19 +89,22 @@ const CMMCParser = new Parser().endianess('big')
 
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
-  console.log(data);
-  const sensor = CMMCParser.parse(data);
-  sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
-  sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
-  var out = {
-    info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
-    d: {}
-  };
-  Object.keys(sensor).forEach((key, idx) => {
-    out.d[key] = sensor[key];
-  });
-  console.log(out);
-  mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
-  // console.log(CMMCParser.parse(data))
+  try {
+    const sensor = CMMCParser.parse(data);
+    sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
+    sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
+    var out = {
+      info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
+      d: {}
+    };
+    Object.keys(sensor).forEach((key, idx) => {
+      out.d[key] = sensor[key];
+    });
+    console.log(out);
+    mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
+  }
+  catch (ex) {
+    console.log('exception...', ex);
+  }
 });
 
