@@ -91,8 +91,8 @@ const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}))
 parser.on('data', function (data) {
   console.log(data);
   const sensor = CMMCParser.parse(data);
-  sensor.temperature = sensor.temperature.toFixed(2);
-  sensor.humidity = sensor.humidity.toFixed(2);
+  sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
+  sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
   var out = {
     info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
     d: {}
