@@ -1,7 +1,6 @@
 #!/bin/env node
 
-
-var Parser = require('binary-parser').Parser;
+const Parser = require('binary-parser').Parser;
 const chalk = require('chalk');
 const SerialPort = require('serialport');
 const Delimiter = SerialPort.parsers.Delimiter;
@@ -9,37 +8,39 @@ const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
 
-let port_ok = false;
+let portOk = false;
 
-const writeCmd = function() {
-    const sleepTimeS = parseInt(process.env.SLEEP_TIME_S || 60, 10); 
-    const cmd = Buffer.allocUnsafe(3);
+const writeCmd = function () {
+  const SLEEP_TIME = process.env.SLEEP_TIME_S || 60;
+  const sleepTimeS = parseInt(SLEEP_TIME, 10);
+  const cmd = Buffer.allocUnsafe(3);
 
-    cmd.writeUInt8(sleepTimeS, 0);
-    cmd.writeUInt8(sleepTimeS, 1);
-    cmd.writeUInt8(sleepTimeS, 2);
-    console.log(cmd)
-    port.write(cmd, (err) => { });
+  cmd.writeUInt8(sleepTimeS, 0);
+  cmd.writeUInt8(sleepTimeS, 1);
+  cmd.writeUInt8(sleepTimeS, 2);
 
-}
+  console.log(cmd);
+  port.write(cmd, (err) => {
+    if (err) {
+      console.log('write port error =>', err);
+    }
+  });
+};
 
 port.on('open', () => {
-  port_ok = true;
+  portOk = true;
   writeCmd();
 });
 
-port.on('error', () => {
-  port_ok = false;
-});
+port.on('error', () => { portOk = false; });
 
-
-setInterval(function() {
-  if (!port_ok)  {
+setInterval(function () {
+  if (!portOk) {
     console.log('serial port closed.');
     return;
   }
   writeCmd();
-}, 60*1000);
+}, 60 * 1000);
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
 //   // console.log(chalk.red('Error: ', err.message));
@@ -81,8 +82,8 @@ const CMMCParser = new Parser().endianess('big')
   .uint32('sum')
   .uint32('sleep_s')
   .uint32('ms_controller')
-  .uint32('sum_controller')
-  
+  .uint32('sum_controller');
+
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   console.log(data);

@@ -28,6 +28,7 @@
   "dependencies": {
     "binary-parser": "^1.3.0",
     "chalk": "^1.1.3",
+    "cmmc-mqtt": "^0.1.6",
     "serialport": "^5.0.0"
   }
 }
