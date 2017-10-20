@@ -93,6 +93,7 @@ parser.on('data', function (data) {
   sensor.temperature = sensor.temperature.toFixed(2);
   sensor.humidity = sensor.humidity.toFixed(2);
   console.log(sensor);
+  mqttClient1.publish(`NAT/ODIN/now/${sensor.to}${sensor.from}/status`, JSON.stringify(sensor), {retain: false});
   // console.log(CMMCParser.parse(data))
 });
 
