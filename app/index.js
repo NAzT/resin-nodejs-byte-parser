@@ -7,7 +7,7 @@ const Delimiter = SerialPort.parsers.Delimiter;
 const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
-const mqtt = require('cmmc-mqtt');
+const mqtt = require('cmmc-mqtt').mqtt;
 
 const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
 
