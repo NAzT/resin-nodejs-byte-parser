@@ -93,7 +93,6 @@ parser.on('data', function (data) {
   const sensor = CMMCParser.parse(data);
   sensor.temperature = sensor.temperature.toFixed(2);
   sensor.humidity = sensor.humidity.toFixed(2);
-  console.log(sensor);
   var out = {
     info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
     d: {}
@@ -101,7 +100,8 @@ parser.on('data', function (data) {
   Object.keys(sensor).forEach((key, idx) => {
     out.d[key] = sensor[key];
   });
-  mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(sensor), {retain: false});
+  console.log(out);
+  mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
   // console.log(CMMCParser.parse(data))
 });
 
