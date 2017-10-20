@@ -97,11 +97,15 @@ parser.on('data', function (data) {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
       d: {}
     };
+
     Object.keys(sensor).forEach((key, idx) => {
       out.d[key] = sensor[key];
     });
+
+    setTimeout(() => {
+      mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
+    }, 100);
     console.log(out);
-    mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
   }
   catch (ex) {
     console.log('exception...', ex);
