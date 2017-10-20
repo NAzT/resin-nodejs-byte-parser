@@ -7,6 +7,7 @@ const Delimiter = SerialPort.parsers.Delimiter;
 const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
+const mqtt = require('cmmc-mqtt');
 
 const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
 
@@ -84,7 +85,7 @@ const CMMCParser = new Parser().endianess('big')
   .uint32('sum')
   .uint32('sleep_s')
   .uint32('ms_controller')
-  .uint32('sum_controller')
+  .uint32('sum_controller');
 
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
