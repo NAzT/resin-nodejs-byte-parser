@@ -54,10 +54,10 @@ setInterval(function () {
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   try {
-    const sensor = parsers.header.parse(data);
+    const data_header = parsers.header.parse(data);
+    console.log(data_header);
+    const sensor = parsers['version_1'].parse(data);
     console.log(sensor);
-    // sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
-    // sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
     const out = {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
       d: {}
