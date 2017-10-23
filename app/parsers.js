@@ -20,8 +20,8 @@ const CMMCParser = new Parser().endianess('big')
     formatter: toHexString
   })
   .uint8('version')
-  .uint8('type')
   .uint32('reserved')
+  .uint8('type')
   .array('from', {
     type: 'uint8',
     length: 6,
