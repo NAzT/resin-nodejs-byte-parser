@@ -24,7 +24,7 @@ const writeCmd = function () {
 
   const header = [0x7e, 0x7f];
   const tail = [0x0d, 0x0a];
-  Buffer.concat([header, CMD, tail]);
+  Buffer.concat([header, CMD, sleepTimeBuffer, tail]);
   console.log(`being written `, data);
   port.write(data, (err) => {
     if (err) {
