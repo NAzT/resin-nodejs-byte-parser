@@ -12,6 +12,7 @@ const mqtt = require('cmmc-mqtt').mqtt;
 const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
 
 let portOk = false;
+let swCounter = 0;
 
 const writeCmd = function () {
   const SLEEP_TIME = process.env.SLEEP_TIME_S || 60;
@@ -22,7 +23,7 @@ const writeCmd = function () {
   cmd.writeUInt8(sleepTimeS, 1);
   cmd.writeUInt8(sleepTimeS, 2);
 
-  const data = [0x7e, 0x7f, 0x0a, 0x02, 0x01, 0x02, 0x0d, 0x0a];
+  const data = [0x7e, 0x7f, 0x0a, swCounter++, 0x01, 0x02, 0x0d, 0x0a];
   console.log(`being written `, data);
   cmd = data;
   port.write(cmd, (err) => {
