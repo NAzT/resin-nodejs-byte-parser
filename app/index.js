@@ -1,6 +1,5 @@
 #!/bin/env node
 
-const Parser = require('binary-parser').Parser;
 const chalk = require('chalk');
 const SerialPort = require('serialport');
 const Delimiter = SerialPort.parsers.Delimiter;
@@ -88,7 +87,7 @@ const CMMCParser = new Parser().endianess('big')
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   try {
-    const sensor = parser.header.parse(data);
+    const sensor = parsers.header.parse(data);
     console.log(sensor);
     // sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
     // sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
