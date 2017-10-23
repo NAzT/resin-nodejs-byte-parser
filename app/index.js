@@ -19,7 +19,7 @@ const writeCmd = function () {
   const sleepTimeS = parseInt(SLEEP_TIME_ENV, 10);
   console.log(`sleepTimeS = ${sleepTimeS}`);
   let sleepTimeBuffer = Buffer.allocUnsafe(4);
-  sleepTimeBuffer.writeUInt32BE(sleepTimeS);
+  sleepTimeBuffer.writeUInt32LE(sleepTimeS);
   const CMD = {UPDATE_TIME: 0x88};
 
   const header = Buffer.from([0x7e, 0x7f]);
