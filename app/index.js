@@ -22,9 +22,9 @@ const writeCmd = function () {
   sleepTimeBuffer.writeUInt32LE(sleepTimeS);
   const CMD = {UPDATE_TIME: 0x88};
 
-  const header = [0x7e, 0x7f];
-  const tail = [0x0d, 0x0a];
-  Buffer.concat([header, CMD, sleepTimeBuffer, tail]);
+  const header = Buffer.from([0x7e, 0x7f]);
+  const tail = Buffer.from([0x0d, 0x0a]);
+  Buffer.concat([header, Buffer.from(CMD.UPDATE_TIME), sleepTimeBuffer, tail]);
   console.log(`being written `, data);
   port.write(data, (err) => {
     if (err) {
