@@ -51,39 +51,6 @@ setInterval(function () {
   writeCmd();
 }, 60 * 1000);
 
-const toHexString = function (arr) {
-  return Buffer.from(arr).toString('hex');
-};
-
-const CMMCParser = new Parser().endianess('big')
-  .array('header', {
-    type: 'uint8',
-    length: 2,
-    formatter: toHexString
-  })
-  .uint8('version')
-  .uint8('type')
-  .uint32('reserved')
-  .array('from', {
-    type: 'uint8',
-    length: 6,
-    formatter: toHexString
-  })
-  .array('to', {
-    type: 'uint8',
-    length: 6,
-    formatter: toHexString
-  })
-  .endianess('little')
-  .uint16('battery')
-  .float('temperature')
-  .float('humidity')
-  .uint32('ms')
-  .uint32('sum')
-  .uint32('sleep_s')
-  .uint32('ms_controller')
-  .uint32('sum_controller');
-
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   try {
