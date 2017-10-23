@@ -17,11 +17,12 @@ let swCounter = 0;
 const writeCmd = function () {
   const SLEEP_TIME_ENV = process.env.SLEEP_TIME_S || 60;
   const sleepTimeS = parseInt(SLEEP_TIME_ENV, 10);
-  console.log(`sleepTimeS = ${sleepTimeS}`);
+  // console.log(`sleepTimeS = ${sleepTimeS}`);
   let sleepTimeBuffer = Buffer.allocUnsafe(4);
   sleepTimeBuffer.writeUInt32LE(sleepTimeS);
-  const CMD = {UPDATE_TIME: 0x88};
-
+  const CMD = {
+    UPDATE_TIME: 0x88
+  };
   const header = Buffer.from([0x7e, 0x7f]);
   const tail = Buffer.from([0x0d, 0x0a]);
   const data = Buffer.concat([header, Buffer.from([CMD.UPDATE_TIME]), sleepTimeBuffer, tail]);
@@ -48,16 +49,8 @@ setInterval(function () {
     return;
   }
   writeCmd();
-}, 1000);
-// // open errors will be emitted as an error event
-// port.on('error', (err) => {
-//   // console.log(chalk.red('Error: ', err.message));
-// });
+}, 60 * 1000);
 
-// port.on('data', (data) => {
-//   // console.log(data);
-//   // console.log(chalk.cyan('Data: ' + data));
-// });
 
 const toHexString = function (arr) {
   return Buffer.from(arr).toString('hex');
