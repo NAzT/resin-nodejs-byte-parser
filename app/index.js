@@ -16,13 +16,14 @@ let portOk = false;
 const writeCmd = function () {
   const SLEEP_TIME = process.env.SLEEP_TIME_S || 60;
   const sleepTimeS = parseInt(SLEEP_TIME, 10);
-  const cmd = Buffer.allocUnsafe(3);
+  let cmd = Buffer.allocUnsafe(3);
 
   cmd.writeUInt8(sleepTimeS, 0);
   cmd.writeUInt8(sleepTimeS, 1);
   cmd.writeUInt8(sleepTimeS, 2);
 
-  console.log(cmd);
+  const data = [0x7e, 0x7f, 0x01, 0x02, 0x01, 0x02, 0x0d, 0x0a];
+  cmd = data;
   port.write(cmd, (err) => {
     if (err) {
       console.log('write port error =>', err);
@@ -43,7 +44,7 @@ setInterval(function () {
     return;
   }
   writeCmd();
-}, 60 * 1000);
+}, 5 * 1000);
 // // open errors will be emitted as an error event
 // port.on('error', (err) => {
 //   // console.log(chalk.red('Error: ', err.message));
