@@ -17,16 +17,16 @@ let swCounter = 0;
 const writeCmd = function () {
   const SLEEP_TIME_ENV = process.env.SLEEP_TIME_S || 60;
   const sleepTimeS = parseInt(SLEEP_TIME_ENV, 10);
-  let cmd = Buffer.allocUnsafe(3);
+  console.log(`sleepTimeS = ${sleepTimeS}`);
+  let sleepTimeBuffer = Buffer.allocUnsafe(4);
+  sleepTimeBuffer.writeUInt32LE(sleepTimeS);
+  const CMD = {UPDATE_TIME: 0x01};
 
-  cmd.writeUInt8(sleepTimeS, 0);
-  cmd.writeUInt8(sleepTimeS, 1);
-  cmd.writeUInt8(sleepTimeS, 2);
-
-  const data = [0x7e, 0x7f, 0xcc, swCounter++, 0x01, 0x0d, 0x03, 0x0a, 0x0d, 0x0a];
+  const header = [0x7e, 0x7f];
+  const tail = [0x0d, 0x0a];
+  Buffer.concat([header, CMD, tail]);
   console.log(`being written `, data);
-  cmd = data;
-  port.write(cmd, (err) => {
+  port.write(data, (err) => {
     if (err) {
       console.log('write port error =>', err);
     }
@@ -38,7 +38,9 @@ port.on('open', () => {
   writeCmd();
 });
 
-port.on('error', () => { portOk = false; });
+port.on('error', () => {
+  portOk = false;
+});
 
 setInterval(function () {
   if (!portOk) {
