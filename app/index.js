@@ -15,15 +15,15 @@ let portOk = false;
 let swCounter = 0;
 
 const writeCmd = function () {
-  const SLEEP_TIME = process.env.SLEEP_TIME_S || 60;
-  const sleepTimeS = parseInt(SLEEP_TIME, 10);
+  const SLEEP_TIME_ENV = process.env.SLEEP_TIME_S || 60;
+  const sleepTimeS = parseInt(SLEEP_TIME_ENV, 10);
   let cmd = Buffer.allocUnsafe(3);
 
   cmd.writeUInt8(sleepTimeS, 0);
   cmd.writeUInt8(sleepTimeS, 1);
   cmd.writeUInt8(sleepTimeS, 2);
 
-  const data = [0x7e, 0x7f, 0xcc, swCounter++, 0x01, 0x02, 0x03, 0x04, 0x0d, 0x0a];
+  const data = [0x7e, 0x7f, 0xcc, swCounter++, 0x01, 0x0d, 0x03, 0x0a, 0x0d, 0x0a];
   console.log(`being written `, data);
   cmd = data;
   port.write(cmd, (err) => {
