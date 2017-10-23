@@ -7,8 +7,9 @@ const Delimiter = SerialPort.parsers.Delimiter;
 const port = new SerialPort(process.env.TARGET_PORT, {
   baudRate: parseInt(process.env.TARGET_BAUDRATE)
 });
-const mqtt = require('cmmc-mqtt').mqtt;
 
+const parsers = require('./parsers');
+const mqtt = require('cmmc-mqtt').mqtt;
 const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
 
 let portOk = false;
@@ -51,7 +52,6 @@ setInterval(function () {
   writeCmd();
 }, 60 * 1000);
 
-
 const toHexString = function (arr) {
   return Buffer.from(arr).toString('hex');
 };
@@ -88,9 +88,10 @@ const CMMCParser = new Parser().endianess('big')
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
   try {
-    const sensor = CMMCParser.parse(data);
-    sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
-    sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
+    const sensor = parser.header.parse(data);
+    console.log(sensor);
+    // sensor.temperature = parseFloat(sensor.temperature.toFixed(2));
+    // sensor.humidity = parseFloat(sensor.humidity.toFixed(2));
     const out = {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
       d: {}
@@ -100,9 +101,9 @@ parser.on('data', function (data) {
       out.d[key] = sensor[key];
     });
 
-    setTimeout(() => {
-      mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
-    }, 100);
+    // setTimeout(() => {
+    //   mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
+    // }, 100);
     console.log(out);
   }
   catch (ex) {
