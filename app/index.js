@@ -20,7 +20,7 @@ const writeCmd = function () {
   console.log(`sleepTimeS = ${sleepTimeS}`);
   let sleepTimeBuffer = Buffer.allocUnsafe(4);
   sleepTimeBuffer.writeUInt32LE(sleepTimeS);
-  const CMD = {UPDATE_TIME: 0x01};
+  const CMD = {UPDATE_TIME: 0x88};
 
   const header = [0x7e, 0x7f];
   const tail = [0x0d, 0x0a];
