@@ -57,7 +57,7 @@ parser.on('data', function (data) {
     const data_header = parsers.header.parse(data);
     console.log(data_header);
     const sensor = parsers['version_1'].parse(data);
-    console.log(sensor);
+    // console.log(sensor);
     const out = {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
       d: {}
