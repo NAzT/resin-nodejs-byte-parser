@@ -67,6 +67,7 @@ parser.on('data', function (data) {
     });
 
     mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
+    mqttClient1.publish(`NAT/ZEUS/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
     console.log(out);
   }
   catch (ex) {
