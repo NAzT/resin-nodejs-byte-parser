@@ -67,9 +67,7 @@ parser.on('data', function (data) {
       out.d[key] = sensor[key];
     });
 
-    // setTimeout(() => {
-    //   mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
-    // }, 100);
+    mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
     console.log(out);
   }
   catch (ex) {
