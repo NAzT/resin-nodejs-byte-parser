@@ -12,7 +12,19 @@ const HeaderParser = new Parser().endianess('big')
   .uint8('version')
   .endianess('little')
   .uint32('reserved')
-  .uint16('type');
+  .uint16('type')
+  .endianess('big')
+  .array('from', {
+    type: 'uint8',
+    length: 6,
+    formatter: toHexString
+  })
+  .array('to', {
+    type: 'uint8',
+    length: 6,
+    formatter: toHexString
+  })
+  .endianess('little');
 
 const CMMCParser = new Parser().endianess('big')
   .array('header', {
