@@ -10,8 +10,8 @@ const HeaderParser = new Parser().endianess('big')
     formatter: toHexString
   })
   .uint8('version')
-  .uint8('type')
-  .uint32('reserved');
+  .uint32('reserved')
+  .uint16('type');
 
 const CMMCParser = new Parser().endianess('big')
   .array('header', {
@@ -21,7 +21,7 @@ const CMMCParser = new Parser().endianess('big')
   })
   .uint8('version')
   .uint32('reserved')
-  .uint8('type')
+  .uint16('type')
   .array('from', {
     type: 'uint8',
     length: 6,
