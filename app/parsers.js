@@ -10,6 +10,7 @@ const HeaderParser = new Parser().endianess('big')
     formatter: toHexString
   })
   .uint8('version')
+  .endianess('little')
   .uint32('reserved')
   .uint16('type');
 
