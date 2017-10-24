@@ -11,13 +11,18 @@ const parsers = require('./parsers');
 const mqtt = require('cmmc-mqtt').mqtt;
 const mqttClient1 = mqtt.create('mqtt://mqtt.cmmc.io', []);
 
+const DEBUG_SHOW_HEADER = parseInt(process.env.DEBUG_SHOW_HEADER);
+const DEBUG_SHOW_RESULT_DATA = parseInt(process.env.DEBUG_SHOW_RESULT_DATA);
+const DEBUG_SHOW_SLEEP_TIME = parseInt(process.env.DEBUG_SHOW_SLEEP_TIME);
+const CONF_SLEEP_TIME_ = process.env.SLEEP_TIME_S;
+const DEBUG_SHOW_SERIAL_DATA_PARSER = process.env.DEBUG_SHOW_SERIAL_DATA_PARSER;
+
 let portOk = false;
 let swCounter = 0;
 
 const writeCmd = function () {
-  const SLEEP_TIME_ENV = process.env.SLEEP_TIME_S || 60;
-  const sleepTimeS = parseInt(SLEEP_TIME_ENV, 10);
-  // console.log(`sleepTimeS = ${sleepTimeS}`);
+  const SLEEP_TIME_ENV = CONF_SLEEP_TIME_;
+  const sleepTimeS = parseInt(SLEEP_TIME_ENV);
   let sleepTimeBuffer = Buffer.allocUnsafe(4);
   sleepTimeBuffer.writeUInt32LE(sleepTimeS);
   const CMD = {
@@ -26,7 +31,12 @@ const writeCmd = function () {
   const header = Buffer.from([0x7e, 0x7f]);
   const tail = Buffer.from([0x0d, 0x0a]);
   const data = Buffer.concat([header, Buffer.from([CMD.UPDATE_TIME]), sleepTimeBuffer, tail]);
-  console.log(`being written `, data);
+
+  if (DEBUG_SHOW_SLEEP_TIME) {
+    console.log(`sleepTimeS = ${sleepTimeS}`);
+    console.log(`being written `, data);
+  }
+
   port.write(data, (err) => {
     if (err) {
       console.log('write port error =>', err);
@@ -53,9 +63,11 @@ setInterval(function () {
 
 const parser = port.pipe(new Delimiter({delimiter: Buffer.from('0d0a', 'hex')}));
 parser.on('data', function (data) {
+  if (DEBUG_SHOW_SERIAL_DATA_PARSER) {
+    console.log(data.toString('hex'));
+  }
   try {
     const data_header = parsers.header.parse(data);
-    console.log(data_header);
     const sensor = parsers['version_1'].parse(data);
     const out = {
       info: {ssid: 'espnow', from: sensor.from, to: sensor.to},
@@ -68,7 +80,15 @@ parser.on('data', function (data) {
 
     mqttClient1.publish(`NAT/ZEUS/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
     mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
-    // console.log(out);
+
+    if (DEBUG_SHOW_HEADER) {
+      console.log(data_header);
+    }
+
+    if (DEBUG_SHOW_RESULT_DATA) {
+      console.log(out);
+    }
+
   }
   catch (ex) {
     console.log('exception...', ex);
