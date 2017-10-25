@@ -82,7 +82,7 @@ parser.on('data', function (data) {
     });
 
     TOPICS.forEach((topic, idx) => {
-      mqttClient1.publish(`${TOPIC_PREFIX}${topic}/${sensor.to}/${sensor.from}/status`);
+      mqttClient1.publish(`${TOPIC_PREFIX}${topic}/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
     });
 
     if (DEBUG_SHOW_HEADER) {
