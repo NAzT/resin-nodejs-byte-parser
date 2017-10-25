@@ -16,6 +16,9 @@ const DEBUG_SHOW_RESULT_DATA = parseInt(process.env.DEBUG_SHOW_RESULT_DATA);
 const DEBUG_SHOW_SLEEP_TIME = parseInt(process.env.DEBUG_SHOW_SLEEP_TIME);
 const CONF_SLEEP_TIME_ = process.env.SLEEP_TIME_S;
 const DEBUG_SHOW_SERIAL_DATA_PARSER = process.env.DEBUG_SHOW_SERIAL_DATA_PARSER;
+let TOPICS = process.env.TOPICS || 'ALPHA';
+const TOPIC_PREFIX = process.env.TOPIC_PREFIX || '';
+TOPICS = TOPICS.split(',').map((item) => item.trim());
 
 let portOk = false;
 let swCounter = 0;
@@ -78,8 +81,9 @@ parser.on('data', function (data) {
       out.d[key] = sensor[key];
     });
 
-    mqttClient1.publish(`NAT/ZEUS/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
-    mqttClient1.publish(`NAT/ODIN/now/${sensor.to}/${sensor.from}/status`, JSON.stringify(out), {retain: false});
+    TOPICS.forEach((topic, idx) => {
+      mqttClient1.publish(`${TOPIC_PREFIX}${topic}/${sensor.to}/${sensor.from}/status`);
+    });
 
     if (DEBUG_SHOW_HEADER) {
       console.log(data_header);
